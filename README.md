@@ -4,7 +4,7 @@ Notify by Line official account message when there is a new movie.
 
 202603 - Now only for 109 Cinemas Premium
 
-### Required
+### Requirement
 
 - repository secret
   - `LINE_CHANNEL_ACCESS_TOKEN`
