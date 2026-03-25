@@ -2,6 +2,8 @@
 
 Notify by Line official account message when there is a new movie.
 
+202603 - Now only for 109 Cinemas Premium
+
 ### Required
 
 - repository secret
