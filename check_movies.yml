@@ -1,0 +1,37 @@
+name: 每日電影監控
+
+on:
+  schedule:
+    # 每天早上 9:00 (JST) 執行，UTC 時間是 00:00
+    - cron: "0 0 * * *"
+  workflow_dispatch:  # 允許手動觸發（方便測試）
+
+jobs:
+  check-movies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 取得 repository 內容
+        uses: actions/checkout@v4
+
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安裝套件
+        run: pip install requests beautifulsoup4
+
+      - name: 執行電影監控腳本
+        env:
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python check_movies.py
+
+      - name: 儲存更新後的電影記錄
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add movies_seen.json
+          git diff --cached --quiet || git commit -m "更新電影記錄 $(date '+%Y-%m-%d')"
+          git push
